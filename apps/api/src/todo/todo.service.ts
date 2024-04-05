@@ -1,19 +1,35 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Todo, TodoDocument } from './todo.schema';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class TodoService {
-  constructor() {}
+  constructor(@InjectModel(Todo.name) private todoModel: Model<TodoDocument>) {}
 
-  todos = [
-    { id: 1, text: 'Buy milk', done: false },
-    { id: 2, text: 'Walk the dog', done: true },
-  ];
-
-  getTodos() {
-    return this.todos;
+  async getTodos(): Promise<Todo[]> {
+    return await this.todoModel.find();
   }
 
-  getTodoById(id: number) {
-    return this.todos.find((todo) => todo.id === id);
+  async getTodoById(id: number) {
+    return await this.todoModel.findById(id);
+  }
+
+  async seed() {
+    await this.todoModel.create({
+      title: 'First todo',
+      description: 'This is the first todo',
+      completed: false,
+    });
+    await this.todoModel.create({
+      title: 'Second todo',
+      description: 'This is the second todo',
+      completed: false,
+    });
+    await this.todoModel.create({
+      title: 'Third todo',
+      description: 'This is the third todo',
+      completed: false,
+    });
   }
 }

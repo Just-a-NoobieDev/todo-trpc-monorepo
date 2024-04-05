@@ -10,10 +10,14 @@ export class TodoRouter {
   ) {}
 
   router = this.trpcService.router({
-    todos: this.trpcService.procedure.query(() => {
+    todos: this.trpcService.procedure.query(async () => {
       return {
-        todos: this.todoService.todos,
+        todos: (await this.todoService.getTodos()) || [],
       };
+    }),
+    seed: this.trpcService.procedure.mutation(async () => {
+      await this.todoService.seed();
+      return {};
     }),
   });
 }
