@@ -7,8 +7,9 @@ import { MongooseModule } from '@nestjs/mongoose';
 @Module({
   imports: [
     TrpcModule,
+    //TODO: Replace the connection string with your own
     MongooseModule.forRoot(
-      'mongodb://localhost:27017/nestjs-trpc-todo',
+      'mongodb://localhost:27017/mongouri'
     ),
   ],
   controllers: [AppController],
